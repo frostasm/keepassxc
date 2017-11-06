@@ -46,6 +46,12 @@ public:
     bool raiseWindow(WId window) override;
     AutoTypeExecutor* createExecutor() override;
 
+#if defined(Q_OS_LINUX)
+    QStringList keyboardLayouts() override;
+    QString activeKeyboardLayout() override;
+    bool setActiveKeyboardLayout(const QString &symbol) override;
+#endif
+
 #if defined(Q_OS_MAC)
     bool raiseLastActiveWindow() override;
     bool raiseOwnWindow() override;

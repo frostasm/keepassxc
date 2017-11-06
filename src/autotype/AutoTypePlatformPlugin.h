@@ -39,6 +39,12 @@ public:
 
     virtual AutoTypeExecutor* createExecutor() = 0;
 
+#if defined(Q_OS_LINUX)
+    virtual QStringList keyboardLayouts() = 0;
+    virtual QString activeKeyboardLayout() = 0;
+    virtual bool setActiveKeyboardLayout(const QString &symbol) = 0;
+#endif
+
 #if defined(Q_OS_MAC)
     virtual bool raiseLastActiveWindow() = 0;
     virtual bool raiseOwnWindow() = 0;

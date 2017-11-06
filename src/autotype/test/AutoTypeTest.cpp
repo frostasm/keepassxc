@@ -68,6 +68,24 @@ AutoTypeExecutor* AutoTypePlatformTest::createExecutor()
     return new AutoTypeExecutorTest(this);
 }
 
+#if defined(Q_OS_LINUX)
+QStringList AutoTypePlatformTest::keyboardLayouts()
+{
+    return QStringList();
+}
+
+QString AutoTypePlatformTest::activeKeyboardLayout()
+{
+    return QString();
+}
+
+bool AutoTypePlatformTest::setActiveKeyboardLayout(const QString &symbol)
+{
+    Q_UNUSED(symbol);
+    return true;
+}
+#endif
+
 void AutoTypePlatformTest::setActiveWindowTitle(const QString& title)
 {
     m_activeWindowTitle = title;

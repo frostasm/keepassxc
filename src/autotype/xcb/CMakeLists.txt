@@ -2,6 +2,7 @@ include_directories(SYSTEM ${X11_X11_INCLUDE_PATH})
 
 set(autotype_XCB_SOURCES
     AutoTypeXCB.cpp
+    XKeyboard.cpp
 )
 
 add_library(keepassx-autotype-xcb MODULE ${autotype_XCB_SOURCES})

@@ -26,7 +26,7 @@
    <item>
     <widget class="QTabWidget" name="generalSettingsTabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -316,7 +316,7 @@
       <attribute name="title">
        <string>Auto-Type</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0,0,0,1">
        <item>
         <widget class="QCheckBox" name="autoTypeEntryTitleMatchCheckBox">
          <property name="text">
@@ -393,6 +393,13 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBox">
+         <property name="text">
+          <string>Switch system keyboard layout to first system layout before perform auto-type</string>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_3">

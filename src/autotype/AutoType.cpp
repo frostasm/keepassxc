@@ -21,6 +21,8 @@
 #include <QApplication>
 #include <QPluginLoader>
 
+#include <QDebug>
+
 #include "config-keepassx.h"
 
 #include "autotype/AutoTypePlatformPlugin.h"
@@ -168,6 +170,14 @@ void AutoType::performAutoType(const Entry* entry, QWidget* hideWindow, const QS
         window = m_plugin->activeWindow();
     }
 
+#if defined(Q_OS_LINUX)
+    const QString keyboardLayout = m_plugin->activeKeyboardLayout();
+    if (keyboardLayout != "us") {
+        Q_ASSERT(m_plugin->setActiveKeyboardLayout("us"));
+        Tools::sleep(50);
+    }
+#endif
+
     QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
 
     for (AutoTypeAction* action : asConst(actions)) {
@@ -179,6 +189,12 @@ void AutoType::performAutoType(const Entry* entry, QWidget* hideWindow, const QS
         action->accept(m_executor);
         QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
     }
+
+#if defined(Q_OS_LINUX)
+    if (keyboardLayout != "us") {
+        m_plugin->setActiveKeyboardLayout(keyboardLayout);
+    }
+#endif
 
     m_inAutoType = false;
 }

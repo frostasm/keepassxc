@@ -35,6 +35,8 @@
 
 #define N_MOD_INDICES (Mod5MapIndex + 1)
 
+class XKeyboard;
+
 class AutoTypePlatformX11 : public QObject, public AutoTypePlatformInterface
 {
     Q_OBJECT
@@ -59,6 +61,10 @@ public:
     KeySym keyToKeySym(Qt::Key key);
 
     void SendKey(KeySym keysym, unsigned int modifiers = 0);
+
+    QStringList keyboardLayouts() override;
+    QString activeKeyboardLayout() override;
+    bool setActiveKeyboardLayout(const QString &symbol) override;
 
 signals:
     void globalShortcutTriggered();
@@ -118,6 +124,8 @@ private:
     KeySym m_currentRemapKeysym;
     KeyCode m_modifier_keycode[N_MOD_INDICES];
     bool m_loaded;
+
+    QSharedPointer<XKeyboard> m_xkeyboard;
 };
 
 class AutoTypeExecutorX11 : public AutoTypeExecutor

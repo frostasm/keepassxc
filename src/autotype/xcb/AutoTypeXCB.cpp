@@ -19,6 +19,7 @@
 
 #include "AutoTypeXCB.h"
 #include "KeySymMap.h"
+#include "XKeyboard.h"
 #include "core/Tools.h"
 
 #include <time.h>
@@ -32,6 +33,9 @@ AutoTypePlatformX11::AutoTypePlatformX11()
 {
     m_dpy = QX11Info::display();
     m_rootWindow = QX11Info::appRootWindow();
+
+    m_xkeyboard = QSharedPointer<XKeyboard>(new XKeyboard(m_dpy));
+    Q_ASSERT(m_xkeyboard->initializedOk());
 
     m_atomWmState = XInternAtom(m_dpy, "WM_STATE", True);
     m_atomWmName = XInternAtom(m_dpy, "WM_NAME", True);
@@ -796,6 +800,35 @@ void AutoTypePlatformX11::SendKey(KeySym keysym, unsigned int modifiers)
         SendModifiers(LockMask, true);
         SendModifiers(LockMask, false);
     }
+}
+
+QStringList AutoTypePlatformX11::keyboardLayouts()
+{
+    QStringList list;
+    const StringVector symbols = m_xkeyboard->groupSymbols();
+    const int count = qMin(m_xkeyboard->groupCount(), int(symbols.size()));
+    for (int i = 0; i < count; ++i) {
+        list.append(QString::fromStdString(symbols[i]));
+    }
+
+    return list;
+}
+
+QString AutoTypePlatformX11::activeKeyboardLayout()
+{
+    return QString::fromStdString(m_xkeyboard->currentGroupSymbol());
+}
+
+bool AutoTypePlatformX11::setActiveKeyboardLayout(const QString &symbol)
+{
+    const auto list = m_xkeyboard->groupSymbols();
+    const int groupCount = std::min(static_cast<std::size_t>(m_xkeyboard->groupCount()), list.size());
+    for (int num = 0; num < groupCount; ++num) {
+        if (list[num] == symbol.toStdString()) {
+            return m_xkeyboard->setGroupByNum(num);
+        }
+    }
+    return false;
 }
 
 int AutoTypePlatformX11::MyErrorHandler(Display* my_dpy, XErrorEvent* event)
